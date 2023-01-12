@@ -8,7 +8,7 @@ import pendulum
 
 class AirflowConstants:
     SDM_DBT_PROJECT_DIRECTORY_ENV_VAR="SDS_SDM_DBT_PROJECT_DIRECTORY"
-    SDS_WAREHOUSE_PATH_ENV_VAR="SDS_WAREHOUSE_PATH"
+    SDS_WAREHOUSE_PATH_ENV_VAR="SDS_WAREHOUSE_PATH1"
     ARTIFACTORY_ENV_VAR="SDS_ARTIFACTORY_PATH"
 
 
@@ -50,18 +50,22 @@ with DAG(
              f" --conf spark.hadoop.fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider"                             
              f" --conf spark.hadoop.fs.s3a.endpoint=http://minio:9000"
              f" --conf spark.hadoop.fs.s3a.access.key=minioadmin"
-             f" --conf spark.hadoop.fs.s3a.secret.key=minioadmin"                             
-             f" --conf spark.sql.catalog.iceberg_catalog=org.apache.iceberg.spark.SparkCatalog --conf spark.sql.catalog.iceberg_catalog.type=hive --conf spark.sql.catalog.iceberg_catalog.uri=hive-metastore:9083"
-             f" --conf spark.sql.catalog.iceberg_catalog.warehouse=s3a://sds/" 
+             f" --conf spark.hadoop.fs.s3a.secret.key=minioadmin"
+             f" --conf spark.sds.hive.catalog=iceberg_catalog"
+             f" --conf spark.sql.session.timeZone=UTC"
+             f" --conf spark.sql.catalog.iceberg_catalog=org.apache.iceberg.spark.SparkCatalog --conf spark.sql.catalog.iceberg_catalog.type=hive --conf spark.sql.catalog.iceberg_catalog.uri=thrift://hive-metastore:9083"
+             f" --conf spark.sql.catalog.iceberg_catalog.warehouse=s3a://sds/iceberg" 
              f" --master local[*] --driver-memory 2g --driver-cores 1 --executor-cores 1 {{{{os.getenv('{AirflowConstants.ARTIFACTORY_ENV_VAR}','/opt/airflow/dbt')}}}}"
-             f" --spark-service spark --config-path file:///sds/meta/$srdm_source.json --modified-after {{{{data_interval_start.to_iso8601_string().split('.')[0]}}}} --modified-before {{{{data_interval_start.to_iso8601_string().split('.')[0]}}}}")
+             f" --spark-service spark --config-path file:///sds/meta/$srdm_source.json --modified-after {{{{data_interval_start.to_iso8601_string().split('.')[0]}}}} --modified-before {{{{data_interval_end.to_iso8601_string().split('.')[0]}}}}")
 
     bash_command_run = (
-        f"cd \"{{{{os.getenv('{AirflowConstants.SDM_DBT_PROJECT_DIRECTORY_ENV_VAR}','/opt/airflow/dbt')}}}}\""
-        f"&& dbt run --models $sdmName"
+        f"cd {{{{os.getenv('{AirflowConstants.SDM_DBT_PROJECT_DIRECTORY_ENV_VAR}','/opt/airflow/dbt')}}}}"
+        f" && dbt run --models $sdmName --profiles-dir ."
         f" --vars '{{"
-        f"\"schema_location\":\"{{{{os.getenv('{AirflowConstants.SDS_WAREHOUSE_PATH_ENV_VAR}','s3a://')}}}}\" }}' "
-        f"\"schema_name\":\"sdm\""
+        f"\"schema_location\":\"{{{{os.getenv('{AirflowConstants.SDS_WAREHOUSE_PATH_ENV_VAR}','s3a://warehouse/iceberg/sdm')}}}}\","
+        f"\"schema_name\":\"sdm\","
+        f"\"srdm_schema_name\":\"srdm\","
+        f"\"parsed_interval_timestamp_ts\":\"{{data_interval_end.to_datetime_string()}}\" }}'"
     )
 
     sdm_task = BashOperator(task_id=f"$source-sdm-population",
