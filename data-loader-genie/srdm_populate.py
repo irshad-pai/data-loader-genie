@@ -35,8 +35,8 @@ class SrdmPopulator:
 
         client = minio.Minio(
             endpoint='localhost:9000',
-            access_key=os.getenv(key='AWS_SECRET_KEY'),
-            secret_key=os.getenv(key='AWS_ACCESS_KEY'),
+            access_key=os.getenv(key='MINIO_ACCESS_KEY'),
+            secret_key=os.getenv(key='MINIO_SECRET_KEY'),
             secure=False
         )
         data_as_bytes = data_source_config.encode('utf-8')
