@@ -45,6 +45,10 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 
 RUN ./aws/install -i /usr/local/aws-cli -b /usr/local/bin
 
+## Installing Java
+RUN apt-get update && \
+    apt-get install -y openjdk-8-jre
+
 ## Installing spark & iceberg
 ARG BUILD_DATE
 ARG SPARK_VERSION=3.2.1
