@@ -34,9 +34,9 @@ class SrdmPopulator:
         data_source_config=json.dumps(spark_config,indent=2)
 
         client = minio.Minio(
-            endpoint='localhost:9000',
-            access_key=os.getenv(key='MINIO_ACCESS_KEY'),
-            secret_key=os.getenv(key='MINIO_SECRET_KEY'),
+            endpoint=os.getenv(key='MINIO_ENDPOINT_URL',default='minio'),
+            access_key=os.getenv(key='MINIO_ACCESS_KEY',default='minioadmin'),
+            secret_key=os.getenv(key='MINIO_SECRET_KEY',default='minioadmin'),
             secure=False
         )
         data_as_bytes = data_source_config.encode('utf-8')
