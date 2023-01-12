@@ -157,6 +157,7 @@ services:
       - ./sds/airflow/dags:/opt/airflow/dags
       - ./webserver_config.py:/opt/airflow/webserver_config.py
       - ./airflow.cfg:/opt/airflow/airflow.cfg
+      - ./sds:/sds
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -180,6 +181,7 @@ services:
       - ./sds/airflow/dags:/opt/airflow/dags
       - ./webserver_config.py:/opt/airflow/webserver_config.py
       - ./airflow.cfg:/opt/airflow/airflow.cfg
+      - ./sds:/sds
     restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -206,6 +208,7 @@ services:
       - ./webserver_config.py:/opt/airflow/webserver_config.py
       - ./airflow.cfg:/opt/airflow/airflow.cfg
       - ./sds/airflow/dags:/opt/airflow/dags
+      - ./sds:/sds
     restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"
