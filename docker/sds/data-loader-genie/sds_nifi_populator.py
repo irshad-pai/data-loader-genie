@@ -89,7 +89,7 @@ class NifiPopulator():
                         comments="Updating Attributes to flow file, like source name etc",
                         properties={"data_output_format": "${avro}", "data_type": "${" + f"{multiline}" + "}",
                                     "output_storage": "${s3}",
-                                    "source_name": f"{str(execution_config.get('source').get('name'))}_json",
+                                    "source_name": f"{str(execution_config.get('source').get('name'))}",
                                     "split_record": "100"}
                     )
                 )
