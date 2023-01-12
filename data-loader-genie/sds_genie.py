@@ -1,7 +1,7 @@
 # Main class for deploying the sds genie
 import sys
-
 import yaml
+from sds_nifi_populator import  NifiPopulator
 
 
 class SDSGenie():
@@ -12,7 +12,8 @@ class SDSGenie():
             except yaml.YAMLError as exc:
                 print(exc)
 
-        NifiPopulator.populate(config)
+        nifi_populator = NifiPopulator()
+        nifi_populator.populate(config)
         SrdmPopulator.populate(config)
         SdmPopulator.populate(config)
         OrchestratorPopulate.populate(config)
