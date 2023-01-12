@@ -110,6 +110,8 @@ services:
 #      - NIFI_WEB_HTTP_PORT=8080
 #    networks:
 #      - dbt_sample_network
+#    volumes:
+#      - ./sds:/sds
 
   redis:
     image: redis
