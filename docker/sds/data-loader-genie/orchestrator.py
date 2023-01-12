@@ -12,7 +12,7 @@ class Orchestrator():
         input_dict['cron'] = config.get('orchestration').get('cron')
 
         template_file = "templates/dag_template.py"
-        output_file = "../airflow/dags/sds_dataloader/"+config.get("source").get("name")+".py"
+        output_file = "/sds/airflow/dags/sds_dataloader/"+config.get("source").get("name")+".py"
         with open(template_file, 'r') as f:
             template_str = f.read()
         t = Template(template_str)

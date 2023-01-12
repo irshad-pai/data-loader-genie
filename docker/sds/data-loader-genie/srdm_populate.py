@@ -4,7 +4,7 @@ import os
 import io
 import minio
 class SrdmPopulator:
-    def populate(dictionary):
+    def populate(self,dictionary):
         base_path=os.getenv(key='SDS_WAREHOUSE_PATH')
         srdm_schema_name="srdm"
         sdm_schema_name="sdm"
@@ -34,7 +34,7 @@ class SrdmPopulator:
         data_source_config=json.dumps(spark_config,indent=2)
 
         client = minio.Minio(
-            endpoint=os.getenv(key='MINIO_ENDPOINT_URL',default='minio'),
+            endpoint=os.getenv(key='MINIO_ENDPOINT_URL',default='minio:9000'),
             access_key=os.getenv(key='MINIO_ACCESS_KEY',default='minioadmin'),
             secret_key=os.getenv(key='MINIO_SECRET_KEY',default='minioadmin'),
             secure=False

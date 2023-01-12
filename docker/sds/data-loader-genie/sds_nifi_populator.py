@@ -35,7 +35,7 @@ class NifiPopulator():
                 s3_process_group.id).process_groups
             data_source_processor = [child.component.name for child in data_source_processor_groups]
 
-            if config.get("source").get("name") not in data_source_processor:
+            if execution_config.get("source").get("name") not in data_source_processor:
                 ad_receiver_pg = nipyapi.canvas.create_process_group(s3_process_group,
                                                                      str(execution_config.get("source").get("name")),
                                                                      (randrange(0, 2000), randrange(0, 2000)),

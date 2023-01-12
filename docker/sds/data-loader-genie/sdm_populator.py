@@ -1,11 +1,13 @@
 import string
+import os
 
 class SdmPopulator():
     def __init__(self, data):
         self.sdm_template_file = "templates/sdm_template.sql"
         self.srdm_template_file = "templates/srdm_template.yml"
-        self.output_file = "../dbt/sdm_genie/models/sdm/" + data.get("sdm").get('name')+'.sql'
-        self.output_yml_file = "../dbt/sdm_genie/models/srdm/" + data.get("srdm").get('name')+'.yml'
+        self.output_file = "/sds/dbt/sdm_genie/models/sdm/" + data.get("sdm").get('name')+'.sql'
+        self.output_yml_file = "/sds/dbt/sdm_genie/models/srdm/" + data.get("srdm").get('name')+'.yml'
+
         input_config = data.get("sdm")
         input_config['srdm_table_name'] = data.get("srdm").get('name')
         input_config['selectColumns'] = SqlGenerator.get_select_sql(input_config.get('selectColumns'))
@@ -18,6 +20,7 @@ class SdmPopulator():
         with open(self.sdm_template_file, 'r') as template_file:
             template = string.Template(template_file.read())
             sql = template.substitute(self.data)
+            os.makedirs(os.path.dirname(self.output_file), exist_ok=True)
             with open(self.output_file, 'w') as output_file:
                 output_file.write(sql)
 
@@ -38,8 +41,7 @@ class SqlGenerator:
     def generate_yml(data: dict, template_path: str, output_path: str):
         with open(template_path) as file:
             template = file.read()
-
         yml_str = template.format(**data)
-
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
         with open(output_path, "w") as file:
             file.write(yml_str)

@@ -23,8 +23,8 @@ srdm:
 sdm: 
   name: ad
   transformations:
-    - field1: upper(key1)
-    - field2: upper(key2)
+    field1: upper(key1)
+    field2: upper(key2)
   outputColumns:
    - field1
    - field2

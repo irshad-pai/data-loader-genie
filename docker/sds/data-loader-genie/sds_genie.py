@@ -22,7 +22,6 @@ class SDSGenie():
         srdm_populator.populate(config)
         sdm_populator = SdmPopulator(config)
         sdm_populator.populate()
-        SdmPopulator.populate(config)
         Orchestrator.populate(config)
 
 
