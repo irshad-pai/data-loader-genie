@@ -1,7 +1,0 @@
-version : 2
-
-sources:
-  - name: srdm
-    schema: srdm
-    tables:
-      - name: direct_hosting_banners
