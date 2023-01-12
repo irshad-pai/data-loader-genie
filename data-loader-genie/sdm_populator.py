@@ -1,6 +1,6 @@
 import string
 
-class SdmPopulator:
+class SdmPopulator():
     def __init__(self, data):
         self.sdm_template_file = "templates/sdm_template.sql"
         self.srdm_template_file = "templates/srdm_template.yml"
@@ -32,7 +32,7 @@ class SqlGenerator:
     def get_transform_sql(columns, transform_to):
         sql = ""
         for key in columns:
-            sql += "{} AS {}, ".format(transform_to[key], key)
+            sql += ", {} AS {}".format(transform_to[key], key)
         sql = sql[:-1]
         return sql
     def generate_yml(data: dict, template_path: str, output_path: str):

@@ -14,8 +14,7 @@ WITH srdm_source_table AS(
     WHERE isValid=true and {{incremental_filter_clause_for_srdm_hidden_partition()}}
 ),
 source_table_transformations AS(
-    SELECT *,
-        $transformations
+    SELECT * $transformations
     FROM srdm_source_table
 )
 SELECT 
