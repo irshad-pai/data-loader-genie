@@ -4,8 +4,8 @@ class SdmPopulator():
     def __init__(self, data):
         self.sdm_template_file = "templates/sdm_template.sql"
         self.srdm_template_file = "templates/srdm_template.yml"
-        self.output_file = "../dbt/sdm_genie/models/sdm/" + data.get("sdm").get('name')+'.sql'
-        self.output_yml_file = "../dbt/sdm_genie/models/srdm/" + data.get("srdm").get('name')+'.yml'
+        self.output_file = "/sds/dbt/sdm_genie/models/sdm/" + data.get("sdm").get('name')+'.sql'
+        self.output_yml_file = "/sds/dbt/sdm_genie/models/srdm/" + data.get("srdm").get('name')+'.yml'
         input_config = data.get("sdm")
         input_config['srdm_table_name'] = data.get("srdm").get('name')
         input_config['selectColumns'] = SqlGenerator.get_select_sql(input_config.get('selectColumns'))
