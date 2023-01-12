@@ -1,0 +1,7 @@
+version : 2
+
+sources:
+  - name: srdm
+    schema: srdm
+    tables:
+      - name: {srdm_table_name}

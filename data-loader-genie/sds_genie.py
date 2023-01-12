@@ -2,7 +2,7 @@
 import sys
 import yaml
 from sds_nifi_populator import  NifiPopulator
-
+from sdm_populator import SdmPopulator
 
 class SDSGenie():
     def run(self, config_path):
@@ -15,6 +15,8 @@ class SDSGenie():
         nifi_populator = NifiPopulator()
         nifi_populator.populate(config)
         SrdmPopulator.populate(config)
+        sdm_populator = SdmPopulator(config)
+        sdm_populator.populate()
         SdmPopulator.populate(config)
         OrchestratorPopulate.populate(config)
 
