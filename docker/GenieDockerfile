@@ -1,0 +1,16 @@
+FROM ubuntu:20.04
+
+# Configuring timezone information
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Install debian packages necessary for running airflow and pip for installing python deps
+RUN apt-get update && apt-get install -y build-essential libssl-dev python3-dev libpq-dev python3-pip curl wget unzip
+RUN pip3 install -U pip && rm -rf /var/lib/apt/lists/*
+
+# Copy common requirements to airflow workdir
+RUN pip3 install wheel
+
+COPY /genie-requirements.txt genie-requirements.txt
+# Install requirements
+RUN pip3 install -r ./genie-requirements.txt

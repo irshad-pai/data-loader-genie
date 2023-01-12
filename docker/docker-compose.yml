@@ -145,6 +145,7 @@ services:
     restart: always
     depends_on:
       - postgres
+      - redis
     env_file:
       - development.env
     ports:
@@ -211,6 +212,30 @@ services:
     networks:
       - dbt_sample_network
 
+  genie:
+    image: genie
+    container_name: data-loader-genie
+    hostname: data-loader-genie
+    build:
+      context: .
+      dockerfile: GenieDockerfile
+    entrypoint: sleep 50000000000
+    depends_on:
+      - postgres
+      - webserver
+      - worker
+      - scheduler
+      - nifi
+      - hive-metastore
+    env_file:
+      - development.env
+    volumes:
+      - ./sds:/sds
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+        - dbt_sample_network
 networks:
   dbt_sample_network:
     driver: bridge
