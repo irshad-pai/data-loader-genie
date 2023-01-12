@@ -5,6 +5,7 @@ from sds_nifi_deployer import NifiDeployer
 from sds_nifi_populator import  NifiPopulator
 from sdm_populator import SdmPopulator
 from orchestrator import Orchestrator
+from srdm_populate import SrdmPopulator
 class SDSGenie():
     def run(self, config_path):
         with open(config_path, "r") as stream:
@@ -17,8 +18,8 @@ class SDSGenie():
         nifi_deployer.deploy()
         nifi_populator = NifiPopulator()
         nifi_populator.populate(config)
-
-        SrdmPopulator.populate(config)
+        srdm_populator = SrdmPopulator()
+        srdm_populator.populate(config)
         sdm_populator = SdmPopulator(config)
         sdm_populator.populate()
         SdmPopulator.populate(config)
