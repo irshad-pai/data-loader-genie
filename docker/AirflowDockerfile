@@ -1,0 +1,46 @@
+FROM ubuntu:20.04
+
+# Configuring timezone information
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Install debian packages necessary for running airflow and pip for installing python deps
+RUN apt-get update && apt-get install -y build-essential libssl-dev python3-dev libpq-dev python3-pip curl wget unzip
+RUN pip3 install -U pip && rm -rf /var/lib/apt/lists/*
+
+#Configuring airflow home directory
+ARG AIRFLOW_DIR='/opt/airflow'
+RUN mkdir ${AIRFLOW_DIR}
+WORKDIR ${AIRFLOW_DIR}
+
+# Copy common requirements to airflow workdir
+COPY /requirements.txt ${AIRFLOW_DIR}/
+RUN pip3 install wheel
+
+# Installing psycopg2 for build dependency
+RUN pip3 install psycopg2==2.9.4
+
+# Installing celery package as we use CeleryExecutor for local development
+RUN pip install celery[redis]==5.2.7
+
+# Install requirements
+RUN pip3 install -r requirements.txt
+
+ENV AIRFLOW_HOME=${AIRFLOW_DIR}
+ENV PYTHONPATH=${AIRFLOW_HOME}
+RUN wget -O helm-exec.tar.gz https://get.helm.sh/helm-v3.7.0-linux-386.tar.gz && \
+    tar -zxvf ./helm-exec.tar.gz && \
+    mv linux-386/helm /usr/local/bin/helm && \
+    rm -rf helm-exec.tar.gz  linux-386
+
+RUN apt-get update && \
+    apt-get -y install sudo && \
+    apt-get update && sudo apt-get install -y ca-certificates curl && \
+    apt-get install -y apt-transport-https && \
+    curl -LO https://dl.k8s.io/release/v1.22.0/bin/linux/amd64/kubectl && \
+    sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
+    rm -rf kubectl
+
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip
+
+RUN ./aws/install -i /usr/local/aws-cli -b /usr/local/bin
