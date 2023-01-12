@@ -25,8 +25,6 @@ class EntityInventory():
         entity_config['entitySpecificProperties'] = entity_inv.create_sub_array(config.get("sourceInventory").get("person").get("entitySpecificProperties"))
         entity_config['sourceSpecificProperties'] = entity_inv.create_sub_array(config.get("sourceInventory").get("person").get("sourceSpecificProperties"))
 
-        print(entity_config)
-
 # if __name__ == '__main__':
 #     with open("/home/ajay/Downloads/giga_account.yml", "r") as stream:
 #         try:
