@@ -3,7 +3,7 @@
         unique_key='uuid',
         file_format= "iceberg",
         partition_by = [get_ps_sdm_hidden_partition_clause()],
-        post_hook = "ALTER TABLE sdm_test.$name SET TBLPROPERTIES ('write.spark.accept-any-schema'='true')"
+        post_hook = "ALTER TABLE sdm.$name SET TBLPROPERTIES ('write.spark.accept-any-schema'='true')"
         )
 }}
 WITH srdm_source_table AS(
