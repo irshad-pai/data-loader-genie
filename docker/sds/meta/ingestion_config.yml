@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ingestion
+metadata:
+  name: sensor-name
+  tags:
+  - winevent sources
+  - authentication
+  annotations: {}
+source:
+  name: 
+  comment:
+  type: json
+  multiline: multine
+  s3:
+    bucket:
+    objectKey:
+srdm:
+  name: wineventparser
+  parserClassName: AutoJSON
+  jobConf:
+    sparkConf:
+      - spark.app.name: winevent auto parser
+sdm: 
+  name: sdm-name
+  transformations:
+    - field1: lower(field1)
+    - field2: explode(field3)
+  outputColumns:
+   - field1
+   - field2
+   - field3
+  jobConf:
+    sparkConf:
+      - spark.app.name: winevent auto parser
+orchestration:
+  cron: 0 */1 * * *
+

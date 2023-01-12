@@ -1,6 +1,5 @@
 version: "3.7"
 services:
-
   hive-metastore:
     image: 'bitsondatadev/hive-metastore:latest'
     container_name: hive-metastore
@@ -39,6 +38,7 @@ services:
       - ./.spark-warehouse/:/spark-warehouse/
       - ./config/hive-site.xml:/usr/spark/conf/hive-site.xml
       - ./config/spark-defaults.conf:/usr/spark/conf/spark-defaults.conf
+      - ./sds:/sds
     environment:
       - WAIT_FOR=hive-metastore:9083
       - AWS_ACCESS_KEY_ID=minioadmin
@@ -60,6 +60,7 @@ services:
       MYSQL_DATABASE: metastore_db
     volumes:
       - ./.hive-metastore:/var/lib/mysql
+      - ./sds:/sds
     networks:
       - dbt_sample_network
 
@@ -79,7 +80,6 @@ services:
     command: server --console-address ":9001" /data
     networks:
       - dbt_sample_network
-
   createbuckets:
     image: minio/mc
     depends_on:
@@ -89,11 +89,131 @@ services:
       /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin;
       /usr/bin/mc mb myminio/warehouse;
       /usr/bin/mc policy download myminio/warehouse;
+      /usr/bin/mc mb myminio/sds;
+      /usr/bin/mc policy download myminio/sds;
+      /usr/bin/mc cp /sds/minio/active-directory.json myminio/sds/raw/active-directory.json;
       exit 0;
       "
+    volumes:
+      - ./sds:/sds
+    networks:
+      - dbt_sample_network
+  nifi:
+    image: apache/nifi:latest
+    container_name: nifi
+    hostname: nifi
+    ports:
+      - '8080:8080' # Unsecured HTTP Web Port
+    environment:
+      - NIFI_WEB_HTTP_PORT=8080
+    networks:
+      - dbt_sample_network
+    volumes:
+      - ./sds:/sds
+
+  redis:
+    image: redis
+    hostname: airflow_redis
+    container_name: airflow_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - dbt_sample_network
+
+  postgres:
+    image: postgres:9.6
+    env_file:
+      - development.env
+    ports:
+      - "5433:5432"
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - dbt_sample_network
+
+  webserver:
+    image: airflow-local
+    build:
+      context: .
+      dockerfile: AirflowDockerfile
+    container_name: airflow_webserver
+    hostname: airflow_webserver
+    restart: always
+    depends_on:
+      - postgres
+    env_file:
+      - development.env
+    ports:
+      - "7200:8080"
+    command: bash -c """airflow db init && airflow webserver """
+    networks:
+      - dbt_sample_network
+    volumes:
+      - ./sds/airflow/dags:/opt/airflow/dags
+      - ./webserver_config.py:/opt/airflow/webserver_config.py
+      - ./airflow.cfg:/opt/airflow/airflow.cfg
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  scheduler:
+    image: airflow-local
+    container_name: airflow_scheduler
+    build:
+      context: .
+      dockerfile: AirflowDockerfile
+    hostname: airflow_scheduler
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - airflow scheduler
+    depends_on:
+      - postgres
+      - webserver
+    env_file:
+      - development.env
+    volumes:
+      - ./sds/airflow/dags:/opt/airflow/dags
+      - ./webserver_config.py:/opt/airflow/webserver_config.py
+      - ./airflow.cfg:/opt/airflow/airflow.cfg
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - dbt_sample_network
+
+  worker:
+    image: airflow-local
+    container_name: airflow_worker
+    hostname: airflow_worker
+    build:
+      context: .
+      dockerfile: AirflowDockerfile
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - airflow celery worker
+    depends_on:
+      - postgres
+      - webserver
+    env_file:
+      - development.env
+    volumes:
+      - ./webserver_config.py:/opt/airflow/webserver_config.py
+      - ./airflow.cfg:/opt/airflow/airflow.cfg
+      - ./sds/airflow/dags:/opt/airflow/dags
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - dbt_sample_network
 
 networks:
   dbt_sample_network:
     driver: bridge
+volumes:
+    db-data:
+        driver: local
