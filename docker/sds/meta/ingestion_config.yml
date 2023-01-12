@@ -7,13 +7,13 @@ metadata:
   - authentication
   annotations: {}
 source:
-  name: 
+  name: ad
   comment:
-  type: json
-  multiline: multine
+  dataType: json
+  isMultiline: false
   s3:
-    bucket:
-    objectKey:
+    bucket: sds
+    objectKey: raw/active-directory.json
 srdm:
   name: wineventparser
   parserClassName: AutoJSON
