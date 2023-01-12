@@ -39,6 +39,7 @@ services:
       - ./.spark-warehouse/:/spark-warehouse/
       - ./config/hive-site.xml:/usr/spark/conf/hive-site.xml
       - ./config/spark-defaults.conf:/usr/spark/conf/spark-defaults.conf
+      - ./sds:/sds
     environment:
       - WAIT_FOR=hive-metastore:9083
       - AWS_ACCESS_KEY_ID=minioadmin
@@ -60,6 +61,7 @@ services:
       MYSQL_DATABASE: metastore_db
     volumes:
       - ./.hive-metastore:/var/lib/mysql
+      - ./sds:/sds
     networks:
       - dbt_sample_network
 
@@ -89,8 +91,23 @@ services:
       /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin;
       /usr/bin/mc mb myminio/warehouse;
       /usr/bin/mc policy download myminio/warehouse;
+      /usr/bin/mc mb myminio/sds;
+      /usr/bin/mc policy download myminio/sds;
+      /usr/bin/mc cp /sds/minio/active-directory.json myminio/sds/raw/active-directory.json; 
       exit 0;
       "
+    volumes:
+      - ./sds:/sds
+    networks:
+      - dbt_sample_network
+  nifi:
+    image: apache/nifi:latest
+    container_name: nifi
+    hostname: nifi
+    ports:
+      - '8080:8080' # Unsecured HTTP Web Port
+    environment:
+      - NIFI_WEB_HTTP_PORT=8080
     networks:
       - dbt_sample_network
 
