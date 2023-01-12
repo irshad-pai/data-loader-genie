@@ -43,8 +43,10 @@ with DAG(
 ) as dag:
     srdm_task = BashOperator(task_id=f"$source-srdm-population",
                              bash_command=f"spark-submit --class $className "
-                                          f"--conf --master local --driver-memory 2g --driver-cores 1 --executor-cores 1 --jars {{{{os.getenv('{AirflowConstants.ARTIFACTORY_ENV_VAR}','/opt/airflow/dbt')}}}}"
-                                          f"--spark-service spark --config-path  --modified-after {{{{data_interval_start.to_iso8601_string().split('.')[0]}}}} --modified-before {{{{data_interval_start.to_iso8601_string().split('.')[0]}}}}")
+             f"--conf spark.sql.catalog.iceberg_catalog=org.apache.iceberg.spark.SparkCatalog --conf spark.sql.catalog.iceberg_catalog.type=hive --conf spark.sql.catalog.iceberg_catalog.uri=hive-metastore:9083"
+             f"--conf spark.sql.catalog.iceberg_catalog.warehouse=s3a://sds/ --conf spark.hadoop.fs.s3a.access.key=minioadmin --conf spark.hadoop.fs.s3a.secret.key=minioadmin --conf spark.sql.catalog.spark_catalog.io-impl=org.apache.iceberg.aws.s3.S3FileIO" 
+             f" --master local[*] --driver-memory 2g --driver-cores 1 --executor-cores 1 --jars {{{{os.getenv('{AirflowConstants.ARTIFACTORY_ENV_VAR}','/opt/airflow/dbt')}}}}"
+             f"--spark-service spark --config-path s3a://sds/spark_config/$srdm_source.json --modified-after {{{{data_interval_start.to_iso8601_string().split('.')[0]}}}} --modified-before {{{{data_interval_start.to_iso8601_string().split('.')[0]}}}}")
 
     bash_command_run = (
         f"cd \"{{{{os.getenv('{AirflowConstants.SDM_DBT_PROJECT_DIRECTORY_ENV_VAR}','/opt/airflow/dbt')}}}}\""

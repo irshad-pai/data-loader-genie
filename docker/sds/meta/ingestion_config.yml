@@ -15,23 +15,19 @@ source:
     bucket: sds
     objectKey: raw/active-directory.json
 srdm:
-  name: wineventparser
+  name: ad
   parserClassName: AutoJSON
   jobConf:
     sparkConf:
       - spark.app.name: winevent auto parser
 sdm: 
-  name: sdm-name
+  name: ad
   transformations:
-    - field1: lower(field1)
-    - field2: explode(field3)
+    - field1: upper(key1)
+    - field2: upper(key2)
   outputColumns:
    - field1
    - field2
-   - field3
-  jobConf:
-    sparkConf:
-      - spark.app.name: winevent auto parser
 orchestration:
   cron: 0 */1 * * *
 
