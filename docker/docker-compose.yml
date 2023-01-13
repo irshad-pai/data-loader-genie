@@ -58,6 +58,7 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
       MYSQL_DATABASE: metastore_db
+      TZ: "UTC"
     volumes:
       - ./.hive-metastore:/var/lib/mysql
       - ./sds:/sds
@@ -77,6 +78,7 @@ services:
       MINIO_ACCESS_KEY: minioadmin
       MINIO_SECRET_KEY: minioadmin
       MINIO_API_SELECT_PARQUET: "on"
+      TZ: "UTC"
     command: server --console-address ":9001" /data
     networks:
       - dbt_sample_network
@@ -106,6 +108,7 @@ services:
       - '8080:8080' # Unsecured HTTP Web Port
     environment:
       - NIFI_WEB_HTTP_PORT=8080
+      - TZ="UTC"
     networks:
       - dbt_sample_network
     volumes:
@@ -157,6 +160,7 @@ services:
       - ./sds/airflow/dags:/opt/airflow/dags
       - ./webserver_config.py:/opt/airflow/webserver_config.py
       - ./airflow.cfg:/opt/airflow/airflow.cfg
+      - ./logs:/opt/airflow/logs
       - ./sds:/sds
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -181,6 +185,7 @@ services:
       - ./sds/airflow/dags:/opt/airflow/dags
       - ./webserver_config.py:/opt/airflow/webserver_config.py
       - ./airflow.cfg:/opt/airflow/airflow.cfg
+      - ./logs:/opt/airflow/logs
       - ./sds:/sds
     restart: always
     extra_hosts:
@@ -208,6 +213,7 @@ services:
       - ./webserver_config.py:/opt/airflow/webserver_config.py
       - ./airflow.cfg:/opt/airflow/airflow.cfg
       - ./sds/airflow/dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
       - ./sds:/sds
     restart: always
     extra_hosts:

@@ -11,13 +11,12 @@ WITH srdm_source_table AS(
             $selectColumns,
             {{ get_sdm_audit_fields() }}
     FROM {{ source('srdm', '$srdm_table_name') }}
-    WHERE isValid=true and {{incremental_filter_clause_for_srdm_hidden_partition()}}
 ),
 source_table_transformations AS(
     SELECT * $transformations
     FROM srdm_source_table
 )
 SELECT 
-    $outputColumns 
+    $outputColumns , {{ get_sdm_audit_fields() }}
     from source_table_transformations 
     order by {{get_ps_sdm_hidden_partition_columns()}};

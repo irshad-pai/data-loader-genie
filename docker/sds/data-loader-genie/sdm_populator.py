@@ -36,7 +36,7 @@ class SqlGenerator:
         sql = ""
         for key in columns:
             sql += ", {} AS {}".format(transform_to[key], key)
-        sql = sql[:-1]
+        # sql = sql[:-1]
         return sql
     def generate_yml(data: dict, template_path: str, output_path: str):
         with open(template_path) as file:

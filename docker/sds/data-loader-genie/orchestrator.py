@@ -10,6 +10,8 @@ class Orchestrator():
         input_dict['className'] = config.get('srdm').get('parserClassName')
         input_dict['sdmName'] = config.get('sdm').get('name')
         input_dict['cron'] = config.get('orchestration').get('cron')
+        input_dict['srdm_source'] = config.get('srdm').get('name')
+
 
         template_file = "templates/dag_template.py"
         output_file = "/sds/airflow/dags/sds_dataloader/"+config.get("source").get("name")+".py"

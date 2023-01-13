@@ -7,4 +7,5 @@ sdm_genie:
       port: 10000
       schema: sdm
       threads: 10
+      auth: NOSASL
   target: final
