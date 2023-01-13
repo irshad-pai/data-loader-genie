@@ -21,14 +21,17 @@ class SrdmPopulator:
                 "srdmTableName": f"{srdm_schema_name}.{source_name}",
                 "sdmTableName": f"{sdm_schema_name}.{source_name}",
                 "transformationConfig": {
-                    "event_timestamp_epoch": "ingested_timestamp"
+                    "event_timestamp_epoch": dictionary["srdm"]["transformationConfig"]
                 }
             }
         else:
             spark_config = {
                 "rdmPath": f"{base_path}/rdm/{source_name}/",
                 "srdmTableName": f"{srdm_schema_name}.{source_name}",
-                "sdmTableName": f"{sdm_schema_name}.{source_name}"
+                "sdmTableName": f"{sdm_schema_name}.{source_name}",
+                "transformationConfig": {
+                    "event_timestamp_epoch": "ingested_timestamp"
+                }
             }
 
         data_source_config=json.dumps(spark_config,indent=2)
