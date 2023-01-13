@@ -93,7 +93,7 @@ services:
       /usr/bin/mc policy download myminio/warehouse;
       /usr/bin/mc mb myminio/sds;
       /usr/bin/mc policy download myminio/sds;
-      /usr/bin/mc cp /sds/minio/active-directory.json myminio/sds/raw/active-directory.json;
+      /usr/bin/mc cp /sds/minio/active-directory.json myminio/sds/raw/ad/active-directory.json;
       exit 0;
       "
     volumes:

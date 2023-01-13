@@ -54,9 +54,9 @@ with DAG(
              f" --conf spark.sds.hive.catalog=iceberg_catalog"
              f" --conf spark.sql.session.timeZone=UTC"
              f" --conf spark.sql.catalog.iceberg_catalog=org.apache.iceberg.spark.SparkCatalog --conf spark.sql.catalog.iceberg_catalog.type=hive --conf spark.sql.catalog.iceberg_catalog.uri=thrift://hive-metastore:9083"
-             f" --conf spark.sql.catalog.iceberg_catalog.warehouse=s3a://sds/iceberg" 
+             f" --conf spark.sql.catalog.iceberg_catalog.warehouse=s3a://warehouse/iceberg" 
              f" --master local[*] --driver-memory 2g --driver-cores 1 --executor-cores 1 {{{{os.getenv('{AirflowConstants.ARTIFACTORY_ENV_VAR}','/opt/airflow/dbt')}}}}"
-             f" --spark-service spark --config-path file:///sds/meta/$srdm_source.json --modified-after {{{{data_interval_start.to_iso8601_string().split('.')[0]}}}} --modified-before {{{{data_interval_end.to_iso8601_string().split('.')[0]}}}}")
+             f" --spark-service spark --config-path s3a://sds/spark_config/$srdm_source.json --modified-after {{{{data_interval_start.to_iso8601_string().split('.')[0]}}}} --modified-before {{{{data_interval_end.to_iso8601_string().split('.')[0]}}}}")
 
     bash_command_run = (
         f"cd {{{{os.getenv('{AirflowConstants.SDM_DBT_PROJECT_DIRECTORY_ENV_VAR}','/opt/airflow/dbt')}}}}"

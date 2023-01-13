@@ -13,7 +13,7 @@ source:
   isMultiline: false
   s3:
     bucket: sds
-    objectKey: raw/active-directory.json
+    objectKey: raw/ad
 srdm:
   name: ad
   parserClassName: AutoJSON
@@ -29,5 +29,5 @@ sdm:
    - field1
    - field2
 orchestration:
-  cron: 0 */1 * * *
+  cron: '*/1 * * * *'
 
