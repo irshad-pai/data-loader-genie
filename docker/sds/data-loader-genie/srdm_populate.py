@@ -46,7 +46,7 @@ class SrdmPopulator:
         data_as_a_stream = io.BytesIO(data_as_bytes)
 
         result = client.put_object(
-            "sds", f"spark_config/{source_name}",data_as_a_stream , length=len(data_as_bytes),
+            "sds", f"spark_config/{source_name}.json",data_as_a_stream , length=len(data_as_bytes),
             content_type="application/json"
         )
 

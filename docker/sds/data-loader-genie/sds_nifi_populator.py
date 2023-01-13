@@ -51,12 +51,12 @@ class NifiPopulator():
                     location=(randrange(0, 1000), (randrange(0, 1000))),
                     name="ListS3",
                     config=nipyapi.nifi.ProcessorConfigDTO(
-                        scheduling_period='60 min',
+                        scheduling_period='0 sec',
                         execution_node="PRIMARY",
                         comments="List S3 processor",
                         properties={"Bucket": f"{bucket_name}", "Region": f"{region}",
                                     "Endpoint Override URL": f"{minio_end_point}",
-                                    "Credentials File": "/sds/nifi/s3.properties"}
+                                    "Credentials File": "/sds/nifi/s3.properties", "prefix": f"{object_key}"}
                     )
                 )
                 fetch_s3_processor = nipyapi.canvas.create_processor(
@@ -65,11 +65,11 @@ class NifiPopulator():
                     location=(randrange(0, 1000), (randrange(0, 1000))),
                     name="FetchS3Object",
                     config=nipyapi.nifi.ProcessorConfigDTO(
-                        scheduling_period='60 min',
+                        scheduling_period='0 sec',
                         execution_node="ALL",
                         comments="Fetch S3 processor",
                         auto_terminated_relationships=['failure'],
-                        properties={"Object Key": f"{object_key}", "Bucket": f"{bucket_name}", "Region": f"{region}",
+                        properties={"Object Key": "${filename}", "Bucket": f"{bucket_name}", "Region": f"{region}",
                                     "Endpoint Override URL": f"{minio_end_point}",
                                     "Credentials File": "/sds/nifi/s3.properties"}
                     )
