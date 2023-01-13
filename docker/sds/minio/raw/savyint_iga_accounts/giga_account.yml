@@ -1,0 +1,222 @@
+apiVersion: v1
+type: ingestion
+metadata:
+  name: savyint_iga_accounts
+  tags:
+  - giga
+  annotations: {}
+source:
+  name: savyint_iga_accounts
+  comment:
+  dataType: json
+  isMultiline: false
+  s3:
+    bucket: sds
+    objectKey: raw/savyint_iga_accounts/
+srdm:
+  name: savyint_iga_accounts
+  parserClassName: AutoJSON
+  jobConf:
+    sparkConf:
+      - spark.app.name: savyint_iga_accounts_auto_parser
+sdm: 
+  name: savyint_iga_accounts
+  transformations:
+    display_name : display_name
+    name : name
+    user_name : user_name
+    user_key : user_key
+    update_user : update_user
+    user_group : user_group
+    end_point_key : end_point_key
+    end_point : end_point
+    account_type : account_type
+    account_ID : account_ID
+    referenced_account_name : referenced_account_name
+    account_class : account_class
+    update_date : update_date
+    update_date_epoch : update_date_epoch
+    account_owner : account_owner
+    account_owner_rank : account_owner_rank
+    account_owner_type : account_owner_type
+    account_owner_value : account_owner_value
+    account_status : account_status
+    last_password_change : last_password_change
+    last_password_change_epoch : last_password_change_epoch
+    password_lock_date : password_lock_date
+    password_lock_date_epoch : password_lock_date_epoch
+    password_change_status : password_change_status
+    last_logon_date : last_logon_date
+    last_logon_date_epoch : last_logon_date_epoch
+    incorrect_logons : incorrect_logons
+    account_creator : account_creator
+    account_create_done : account_create_done
+    account_create_done_epoch : account_create_done_epoch
+    account_valid_from : account_valid_from
+    account_valid_from_epoch : account_valid_from_epoch
+    account_valid_through : account_valid_through
+    account_valid_through_epoch : account_valid_through_epoch
+    description : description
+    custom_property_27 : custom_property_27
+    custom_property_26 : custom_property_26
+    custom_property_4 : custom_property_4
+    custom_property_2 : custom_property_2
+    custom_property_3 : custom_property_3
+    custom_property_1 : custom_property_1
+    custom_property_21 : custom_property_21
+    custom_property_20 : custom_property_20
+    custom_property_22 : custom_property_22
+    custom_property_24 : custom_property_24
+    custom_property_5 : custom_property_5
+    custom_property_16 : custom_property_16
+    custom_property_8 : custom_property_8
+    custom_property_9 : custom_property_9
+    custom_property_6 : custom_property_6
+    custom_property_7 : custom_property_7
+    custom_property_25 : custom_property_25
+    custom_property_10 : custom_property_10
+    custom_property_12 : custom_property_12
+    custom_property_19 : custom_property_19
+    custom_property_14 : custom_property_14
+    custom_property_18 : custom_property_18
+    custom_property_17 : custom_property_17
+    custom_property_11 : custom_property_11
+    custom_property_23 : custom_property_23
+    custom_property_15 : custom_property_15
+    custom_property_31 : custom_property_31
+    custom_property_13 : custom_property_13
+    custom_property_32 : custom_property_32
+    custom_property_33 : custom_property_33
+    custom_property_29 : custom_property_29
+    custom_property_28 : custom_property_28
+    custom_property_30 : custom_property_30
+    source_type : source_type
+    source_name : source_name
+    original_string : original_string
+    source_uuid : source_uuid
+    event_timestamp_date : event_timestamp_date
+    event_timestamp_epoch : event_timestamp_epoch
+    event_timeoffset : event_timeoffset
+    event_timestamp_iso_client_timezone : event_timestamp_iso_client_timezone
+    event_timestamp_day : event_timestamp_day
+    event_timestamp_month : event_timestamp_month
+    event_timestamp_year : event_timestamp_year
+    event_timestamp_week_day : event_timestamp_week_day
+    event_timestamp_week_index : event_timestamp_week_index
+    event_timestamp_hour : event_timestamp_hour
+    event_timestamp_minute : event_timestamp_minute
+    parsed_timestamp : parsed_timestamp
+    ingested_timestamp : ingested_timestamp
+    rank : rank
+    type : type
+    value : value
+  outputColumns:
+  - display_name
+  - name
+  - user_name
+  - user_key
+  - update_user
+  - user_group
+  - end_point_key
+  - end_point
+  - account_type
+  - account_ID
+  - referenced_account_name
+  - account_class
+  - update_date
+  - update_date_epoch
+  - account_owner
+  - account_owner_rank
+  - account_owner_type
+  - account_owner_value
+  - account_status
+  - last_password_change
+  - last_password_change_epoch
+  - password_lock_date
+  - password_lock_date_epoch
+  - password_change_status
+  - last_logon_date
+  - last_logon_date_epoch
+  - incorrect_logons
+  - account_creator
+  - account_create_done
+  - account_create_done_epoch
+  - account_valid_from
+  - account_valid_from_epoch
+  - account_valid_through
+  - account_valid_through_epoch
+  - description
+  - custom_property_27
+  - custom_property_26
+  - custom_property_4
+  - custom_property_2
+  - custom_property_3
+  - custom_property_1
+  - custom_property_21
+  - custom_property_20
+  - custom_property_22
+  - custom_property_24
+  - custom_property_5
+  - custom_property_16
+  - custom_property_8
+  - custom_property_9
+  - custom_property_6
+  - custom_property_7
+  - custom_property_25
+  - custom_property_10
+  - custom_property_12
+  - custom_property_19
+  - custom_property_14
+  - custom_property_18
+  - custom_property_17
+  - custom_property_11
+  - custom_property_23
+  - custom_property_15
+  - custom_property_31
+  - custom_property_13
+  - custom_property_32
+  - custom_property_33
+  - custom_property_29
+  - custom_property_28
+  - custom_property_30
+  - source_type
+  - source_name
+  - original_string
+  - source_uuid
+  - event_timestamp_date
+  - event_timestamp_epoch
+  - event_timeoffset
+  - event_timestamp_iso_client_timezone
+  - event_timestamp_day
+  - event_timestamp_month
+  - event_timestamp_year
+  - event_timestamp_week_day
+  - event_timestamp_week_index
+  - event_timestamp_hour
+  - event_timestamp_minute
+  - parsed_timestamp
+  - ingested_timestamp
+  - rank
+  - type
+  - value
+sourceInventory:
+  person:
+    name: savyint_iga_accounts_person
+    primaryKey: user_name
+    filterBy: user_name IS NOT NULL
+    sourcePrefix: savyint_iga_accounts
+    entityPrefix: person
+    origin: Savyint  IGA Accounts
+    commonProperties:
+      - class: 'Person'
+      - display_label: user_name
+    entitySpecificProperties:
+      - full_name: user_name
+      - email_id: CAST(CASE WHEN end_point='Service Now' THEN LOWER(custom_property_4) ELSE NULL END AS STRING)
+      - manager: CAST(CASE WHEN end_point='Service Now' THEN custom_property_26 ELSE NULL END AS STRING)
+    sourceSpecificProperties:
+      - job_title: CAST(CASE WHEN end_point IN ('Active Directory (Corp AD)', 'Jira', 'Bamboo', 'Splunk SIEM','Admin (paysafecard)', 'Splunk PROD', 'Confluence', 'Admin (Pay Later)', 'OBIEE', 'Bitbucket', 'Payment Processing Business Intelligence (PPBI)') THEN custom_property_10 ELSE NULL END AS STRING)
+      - location: CAST(CASE WHEN end_point IN ('Active Directory (Corp AD)', 'Jira', 'Bamboo', 'Splunk SIEM','Admin (paysafecard)', 'Splunk PROD', 'Confluence', 'Admin (Pay Later)', 'OBIEE', 'Bitbucket', 'Payment Processing Business Intelligence (PPBI)') THEN custom_property_17 ELSE NULL END AS STRING)
+      - employee_id: CAST(CASE WHEN end_point IN ('Active Directory (Corp AD)', 'Jira', 'Bamboo', 'Splunk SIEM','Admin (paysafecard)', 'Splunk PROD', 'Confluence', 'Admin (Pay Later)', 'OBIEE', 'Bitbucket', 'Payment Processing Business Intelligence (PPBI)') THEN custom_property_8 ELSE NULL END AS STRING)
+      - company: CAST(CASE WHEN end_point IN ('Active Directory (Corp AD)', 'Jira', 'Bamboo', 'Splunk SIEM','Admin (paysafecard)', 'Splunk PROD', 'Confluence', 'Admin (Pay Later)', 'OBIEE', 'Bitbucket', 'Payment Processing Business Intelligence (PPBI)') THEN custom_property_9 ELSE NULL END AS STRING)
+      - address: CAST(CASE WHEN end_point IN ('Active Directory (Corp AD)', 'Jira', 'Bamboo', 'Splunk SIEM','Admin (paysafecard)', 'Splunk PROD', 'Confluence', 'Admin (Pay Later)', 'OBIEE', 'Bitbucket', 'Payment Processing Business Intelligence (PPBI)') THEN custom_property_14 ELSE NULL END AS STRING)
